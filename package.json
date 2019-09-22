@@ -1,0 +1,22 @@
+{
+  "name": "webpack-alias-sync-plugin",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webpack",
+    "alias",
+    "to",
+    "sync",
+    "jsconfig",
+    "tsconfig"
+  ],
+  "author": "DeepKolos <deepkolos@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^24.9.0"
+  }
+}
