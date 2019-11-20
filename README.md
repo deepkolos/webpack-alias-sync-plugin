@@ -24,3 +24,5 @@ module.export = {
 
 1. 兼容完全 webpack resolve 规则
 2. 完善单元测试
+3. 支持单独配置同步那个配置
+4. 支持jest alias, 不过还是早点都ts吧...
