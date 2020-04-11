@@ -8,28 +8,35 @@ class WebpackAliasSyncPlugin {
   }
 
   apply(complier) {
-    complier.hooks.afterResolvers.tap('WebpackAliasSyncPlugin', complation => {
-      const {
-        resolve: { alias },
-        module: { rules },
-      } = complation.options;
-      const { context: projectRoot } = complation;
-      // console.log('TCL: WebpackAliasSyncPlugin -> apply -> alias', alias);
-      // console.log(
-      // 'TCL: WebpackAliasSyncPlugin -> apply -> projectRoot',
-      // projectRoot,
-      // );
+    complier.hooks.afterResolvers.tap(
+      'WebpackAliasSyncPlugin',
+      (complation) => {
+        const {
+          resolve: { alias },
+          module: { rules },
+        } = complation.options;
+        // const { context: projectRoot } = complation;
+        const projectRoot = __dirname.replace(
+          `node_modules${path.sep}webpack-alias-sync-plugin`,
+          '',
+        );
+        // console.log('TCL: WebpackAliasSyncPlugin -> apply -> alias', alias);
+        // console.log(
+        // 'TCL: WebpackAliasSyncPlugin -> apply -> projectRoot',
+        // projectRoot,
+        // );
 
-      if (alias) {
-        const paths = this.aliasToPaths(alias, projectRoot);
-        // const tsUsed = this.tsUsed(rules);
-        this.out('js') && this.writeConfig('js', paths, projectRoot);
-        this.out('ts') && this.writeConfig('ts', paths, projectRoot);
-        this.out('jest') && this.writeJestConfig(alias, projectRoot);
-        // console.log('TCL: WebpackAliasSyncPlugin -> apply -> tsUsed', tsUsed);
-        // console.log('TCL: apply -> paths', paths);
-      }
-    });
+        if (alias) {
+          const paths = this.aliasToPaths(alias, projectRoot);
+          // const tsUsed = this.tsUsed(rules);
+          this.out('js') && this.writeConfig('js', paths, projectRoot);
+          this.out('ts') && this.writeConfig('ts', paths, projectRoot);
+          this.out('jest') && this.writeJestConfig(alias, projectRoot);
+          // console.log('TCL: WebpackAliasSyncPlugin -> apply -> tsUsed', tsUsed);
+          // console.log('TCL: apply -> paths', paths);
+        }
+      },
+    );
   }
 
   aliasToPaths(alias, root) {
@@ -99,7 +106,7 @@ class WebpackAliasSyncPlugin {
 
       if (config.compilerOptions && config.compilerOptions.paths) {
         const oldPaths = config.compilerOptions.paths;
-        const same = Object.keys(paths).every(key => {
+        const same = Object.keys(paths).every((key) => {
           return oldPaths[key] && paths[key][0] === oldPaths[key][0];
         });
         if (same) {
@@ -115,7 +122,7 @@ class WebpackAliasSyncPlugin {
       paths,
     };
 
-    fs.writeFile(configPath, JSON.stringify(config, null, 2), e => {
+    fs.writeFile(configPath, JSON.stringify(config, null, 2), (e) => {
       console.log(`写入${type}config.json${e ? '失败' : '成功'}`);
     });
   }
@@ -135,7 +142,7 @@ class WebpackAliasSyncPlugin {
 
       if (config.moduleNameMapper) {
         const oldPaths = config.moduleNameMapper;
-        const same = Object.keys(paths).every(key => {
+        const same = Object.keys(paths).every((key) => {
           return oldPaths[key] && paths[key][0] === oldPaths[key][0];
         });
         if (same) {
@@ -154,7 +161,7 @@ class WebpackAliasSyncPlugin {
     fs.writeFile(
       configPath,
       `module.exports = ${JSON.stringify(config, null, 2)}`,
-      e => {
+      (e) => {
         console.log(`写入jest.config.json${e ? '失败' : '成功'}`);
       },
     );
